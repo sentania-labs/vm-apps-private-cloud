@@ -20,7 +20,7 @@ module "cloud_accounts_vsphere" {
 ###NSX Manager
 module "cloud_accounts_nsxt" {
   source  = "sentania-labs/vmapps-nsxcloudaccount/vra"
-  version = "0.5.0"
+  version = "0.1.0"
   for_each = {
     for ca in var.nsx_accounts :
     ca.name => ca
