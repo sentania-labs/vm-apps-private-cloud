@@ -101,7 +101,7 @@ variable "nsx_accounts" {
  *       hostname            = string
  *       description         = string
  *       enabled_datacenters = list(string)
- *       nsxManager          = string
+ *       nsx_manager          = string
  *       capability_tags     = [...]
  *       image_mappings      = [
  *         {
@@ -120,7 +120,7 @@ variable "vsphere_accounts" {
     hostname            = string
     description         = string
     enabled_datacenters = list(string)
-    nsxManager          = string
+    nsx_manager         = string
 
     capability_tags = list(object({
       key   = string

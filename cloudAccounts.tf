@@ -1,7 +1,7 @@
 ####ON PREM vSphere Infrastructure
 module "cloud_accounts_vsphere" {
   source  = "sentania-labs/vmapps-vspherecloudaccount/vra"
-  version = "0.5.0"
+  version = "0.6.0"
   for_each = {
     for ca in var.vsphere_accounts :
     ca.name => ca
@@ -13,7 +13,7 @@ module "cloud_accounts_vsphere" {
   username            = var.serviceAccountUserName
   enabled_datacenters = each.value.enabled_datacenters
   capability_tags     = each.value.capability_tags
-  nsxManager          = module.cloud_accounts_nsxt[each.value.nsxManager].cloud_account.id
+  nsx_manager         = module.cloud_accounts_nsxt[each.value.nsx_manager].cloud_account.id
 }
 ###END vSphere
 

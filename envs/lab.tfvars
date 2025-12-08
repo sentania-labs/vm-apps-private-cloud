@@ -19,7 +19,7 @@ vsphere_accounts = {
     hostname            = "vcf-lab-vcenter-wld02.int.sentania.net"
     description         = "vcf-lab-wld02-DC"
     enabled_datacenters = ["vcf-lab-wld02-dc01", "vcf-lab-wld02-dc02"]
-    nsxManager          = "vcf-lab-nsxmgr-wld02"
+    nsx_manager         = "vcf-lab-nsxmgr-wld02"
     capability_tags = [
       {
         key   = "cloud",
