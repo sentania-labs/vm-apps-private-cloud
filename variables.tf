@@ -10,6 +10,11 @@ variable "vcfa_url" {
   type = string
 }
 
+variable "vcfa_organization" {
+  type        = string
+  description = "The VCFA Organization"
+}
+
 /**
  * vcfa_refresh_token
  * Refresh token used for authentication to the VCF-A API.

@@ -1,5 +1,5 @@
-vcfa_url = "https://vcf-lab-automation.int.sentania.net"
-
+vcfa_url          = "https://vcf-lab-automation.int.sentania.net"
+vcfa_organization = "vcf-lab-vm-apps"
 nsx_accounts = {
   nsx-wld02 = {
     name     = "vcf-lab-nsxmgr-wld02"
