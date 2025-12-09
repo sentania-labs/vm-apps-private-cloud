@@ -30,7 +30,7 @@ jobs:
 
       - name: Terraform Init
         run: |
-             terraform init -migrate-state -input=false -upgrade \ 
+             terraform init -migrate-state -input=false -upgrade \
              -backend-config="conn_str=postgres://${{ secrets.PSQL_TF_USER }}:${{ secrets.PSQL_TF_PASS }}@${{ secrets.PSQL_TF_HOST }}:5433/${{ secrets.PSQL_TF_DB }}?sslmode=disable"
 
       - name: Terraform Validate
@@ -54,4 +54,3 @@ jobs:
 
       - name: Clean workspace
         run: rm -rf $GITHUB_WORKSPACE/.[!.]*
-
