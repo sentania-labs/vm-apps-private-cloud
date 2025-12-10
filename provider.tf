@@ -5,5 +5,6 @@ provider "vra" {
   insecure      = var.insecure
 }
 provider "github" {
+  owner = "sentania-labs"
   token = var.github_access_token
 }
