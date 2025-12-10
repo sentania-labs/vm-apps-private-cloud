@@ -2,9 +2,9 @@ module "repository" {
   source  = "mineiros-io/repository/github"
   version = "0.18.0"
 
-  for_each = module.projects
+  for_each = module.projects.project
 
-  name       = each.value.project_key
+  name       = each.value.name
   visibility = "public"
   template = {
     owner      = "sentania-labs"
