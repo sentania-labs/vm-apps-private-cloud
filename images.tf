@@ -1,5 +1,5 @@
 module "image_mappings" {
-  source     = "sentania-labs/vmapps-image-profile/vra"
+  source     = "sentania-labs/image-profile/vra"
   version    = "0.1.0"
   depends_on = [time_sleep.wait_cloud_account_creation]
   for_each = {

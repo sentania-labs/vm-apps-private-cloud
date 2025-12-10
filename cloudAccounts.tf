@@ -1,6 +1,6 @@
 ####ON PREM vSphere Infrastructure
 module "cloud_accounts_vsphere" {
-  source  = "sentania-labs/vmapps-vspherecloudaccount/vra"
+  source  = "sentania-labs/vspherecloudaccount/vra"
   version = "0.6.0"
   for_each = {
     for ca in var.vsphere_accounts :
@@ -19,7 +19,7 @@ module "cloud_accounts_vsphere" {
 
 ###NSX Manager
 module "cloud_accounts_nsxt" {
-  source  = "sentania-labs/vmapps-nsxcloudaccount/vra"
+  source  = "sentania-labs/nsxcloudaccount/vra"
   version = "0.1.0"
   for_each = {
     for ca in var.nsx_accounts :
