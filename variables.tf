@@ -52,6 +52,10 @@ variable "serviceAccountPassword" {
   sensitive = true
 }
 
+variable "github_access_token" {
+  type      = string
+  sensitive = true
+}
 
 ########################################
 # NSX Cloud Accounts
