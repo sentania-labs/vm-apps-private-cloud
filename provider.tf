@@ -4,3 +4,6 @@ provider "vra" {
   refresh_token = var.vcfa_refresh_token
   insecure      = var.insecure
 }
+provider "github" {
+  token = var.github_access_token
+}
