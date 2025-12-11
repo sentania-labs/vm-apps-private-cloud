@@ -1,6 +1,11 @@
 
 # vm-apps-private-cloud
 
+---
+![VCF Control Plane Flow](./images/flow.png)
+
+---
+
 This repository is the **control-plane automation layer** for building a fully code‑driven VMware Cloud Foundation (VCF) environment.  
 It provides the GitOps workflow for creating **VCF Automation (Aria Automation 8.18) VM‑Apps projects**, onboarding application teams, and preparing their deployment repositories.
 
