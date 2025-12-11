@@ -1,93 +1,302 @@
-# vraPrivateCloudDemo
 
-A Terraform project to configure a home‑lab environment for vRealize Automation (vRA 8).
+# vm-apps-private-cloud
 
-## What is this
+This repository is the **control-plane automation layer** for building a fully code‑driven VMware Cloud Foundation (VCF) environment.  
+It provides the GitOps workflow for creating **VCF Automation (Aria Automation 8.18) VM‑Apps projects**, onboarding application teams, and preparing their deployment repositories.
 
-This repository provides Terraform configuration to stand up and manage a private‑cloud lab environment backed by vRA 8 or VCF 9 VM Apps. It enables automation of cloud accounts, zones, images, flavors, and blueprint configurations to simplify deployment and reproducibility.
+Over time, this repository will evolve into the foundation of a **VCF-as-a-Service platform**, enabling VCF to be consumed like a public cloud.
 
-Tested with:
+---
 
-- Terraform v1.3.5  
-- vRA Terraform provider v0.3.3  
+# 🚀 Purpose
 
-## Structure
+This repository manages **platform‑level resources**, not application workloads.
+
+It currently automates:
+
+- Creation of **VCF Automation Projects (VM‑Apps tenants)**
+- [Creation of **GitHub application repositories** mapped to each project](https://github.com/sentania-labs/vcf-lab-application-template)
+- Injection of secrets, variables, and Terraform layouts into those repos
+- Enabling each application team to independently deploy their infrastructure
+
+Future expansion includes:
+
+- NSX‑T segment provisioning  
+- AVI load balancer automation  
+- vDefend Distributed Firewall policies  
+- Infrastructure tagging and metadata  
+- Multi‑domain and multi‑region tenancy  
+- Full lifecycle governance & compliance checks  
+
+A separate repository will provide a matching architecture for **All‑Apps** tenants.
+
+---
+
+# 📁 Repository Structure
 
 ```
-.
-├── backend.tf          # Terraform backend configuration
-├── cloudAccounts.tf    # Cloud account definitions (vSphere, NSX, etc.)
-├── cloudzone.tf        # Cloud zone configuration
-├── flavors.tf          # VM flavor definitions
-├── images.tf           # VM image definitions
-├── blueprints.tft      # vRA blueprint definitions
-├── main.tf             # Root Terraform file
-├── variables.tf        # Input variables
-├── versions.tf         # Required providers / terraform version
-└── README.md           # This file
+├── envs/
+│   ├── example.tfvars                     # (future) Annotated example 
+│   └── lab.tfvars                        # Example environment
+│
+└── .github/
+    └── workflows/
+        ├── configure-private-cloud.yml  # Automation for platform changes
+        └── validate.yml                 # (future) Governance checks
+├── backend.tf                           # S3 backend storing platform state
+├── blueprints.tf                        # Creates blueprints declared in tfvars for each project
+├── cloudAccounts.tf                     # Creates defined cloud accounts
+├── cloudzone.tf                         # Creates cloud zones based on enabled regions in provisioned cloud accounts
+├── flavors.tf                           # Creates flavor profiles in all cloud zones
+├── images.tf                            # Creates image profiles in all cloud zones
+├── LICENSE                              # MIT LICENSE
+├── main.tf                              # Generates global locals and data references
+├── projects.tf                          # Provisions VCFA VM Apps projects
+├── provider.tf                          # VCFA + GitHub providers
+├── README.md                            # This file
+├── repositories.tf                      # Creates repositories based on project inputs
+├── variables.tf                         # Input declarations
+├── versions.tf                          # required providers and versions
 ```
 
-Directories:
+---
 
-- `blueprint/` — Additional blueprint-related resources (if any)  
-- `envs/`, `flavor_profile/`, `image_profile/`, etc. — Profiles for environment / flavor / image configurations  
+# 🧭 How the System Works
 
-## Prerequisites
+## 1️⃣ Platform Team Manages This Repo
 
-- A working vRA 8 installation (or vRA-compatible environment)  
-- Proper credentials / permissions to manage cloud accounts, compute resources, and templates in vRA  
-- Terraform v1.3.5 (or compatible)  
-- vRA Terraform provider v0.3.3  
+Platform engineers define **all application teams** and their environments:
 
-## How to Use
+```hcl
+projects = {
+  finance = {
+    name           = "Finance"
+    description    = "Finance app team"
+    administrators = ["finmgr@corp", "englead@corp"]
+  }
+  platform = {
+    name = "Platform"
+    administrators = ["platops@corp"]
+  }
+}
+```
 
-1. Clone the repository  
-   ```bash
-   git clone https://github.com/sentania-labs/vraPrivateCloudDemo.git
-   cd vraPrivateCloudDemo
-   ```  
-2. Review and customize variable values in `variables.tf`, especially credentials, account IDs, cloud zones, etc.  
-3. Initialize Terraform  
-   ```bash
-   terraform init
-   ```  
-4. Review the Terraform plan  
-   ```bash
-   terraform plan
-   ```  
-5. Apply the configuration  
-   ```bash
-   terraform apply
-   ```  
-6. After apply completes, your vRA environment should include configured cloud accounts, zones, flavors, images, and blueprints — enabling you to deploy VMs or services via vRA’s self-service catalog.
+Running Terraform:
 
-## Recommended Workflow & Best Practices
+- Creates VCFA Plumbing to vCF
+- Creates VCFA Projects  
+- [Creates associated GitHub repos](https://github.com/sentania-labs/vcf-lab-application-template)
+- Drops in starter IaC  
+- Wires repos with CI/CD  
+- Configures secrets required to deploy from VCFA  
 
-- Use a dedicated backend (e.g. remote or state backend) — configured in `backend.tf`  
-- Store sensitive credentials securely (not in plaintext in `variables.tf`)  
-- Use environment-specific variable overrides (e.g. via `-var-file`) when managing multiple environments  
-- Review and validate resources before apply — especially in production or shared environments  
+Each project receives:
 
-## Use Cases & Motivation
+- An isolated IaC repo
+- Its own TF state  
+- Its own VCFA project  
 
-- Automating the setup of a vRA‑backed private cloud lab environment  
-- Reproducible infrastructure provisioning via Terraform + vRA  
-- Easier experimentation and testing of cloud templates / blueprints without manual steps  
+---
 
-## Known Limitations
+## 2️⃣ Application Teams Deploy From Their Created Repo
 
-- Requires working vRA 8 or VCF 9 VM Apps environment  
-- The repo assumes familiarity with vSphere/NSX (or other supported infrastructure) as underlying cloud resources  
-- Sensitive data (credentials, secrets) management is left to the user — not handled out-of-the-box  
-- Tested only with specific versions: Terraform v1.3.5 and vRA provider v0.3.3  
+A project‑specific repo is generated automatically.
 
-## Contributing
+Inside that repo, teams receive:
 
-Feel free to submit issues or pull requests. If you add support for new providers, infrastructure types, or improve automation/workflows — please update this README accordingly.
+- A Terraform project for Blueprint or Machine deployments  
+- A GitHub Actions pipeline (`deployment.yml`)  
+- A `decommission.yml` workflow to safely destroy infra  
+- Backend wiring using a normalized project key  
+- A clean separation from the control-plane repo  
 
-## License & Disclaimer
+They deploy infrastructure by simply editing tfvars and pushing commits.
 
-This project is provided “as is” for lab/demo purposes. Use at your own risk, especially when working with production infrastructure or sensitive environments.
+---
 
-## Questions ?
-scottb@sentania.net
+## 3️⃣ Decommission Workflow for Safe Cleanup
+
+VCFA Projects **cannot be deleted** if workloads still exist.
+
+Each generated repo therefore includes a **Decommission workflow** that:
+
+1. Runs `terraform destroy`  
+2. Removes all infrastructure  
+3. Cleans its Terraform state  
+4. Marks the project as “safe for deletion”  
+
+Only after this workflow completes should the platform team remove the project from `var.projects`.
+
+This prevents:
+
+- Orphaned workloads  
+- Blocked VCFA project deletion  
+- Terraform state drift  
+
+---
+
+# 🔧 Usage
+
+## Step 1 — Define Environment Inputs
+
+Create a tfvars file:
+
+```
+cp envs/example.tfvars envs/lab.tfvars
+```
+
+Example:
+
+```hcl
+vcfa_url           = "https://vcfa.lab.local"
+vcfa_organization  = "lab-org"
+vcfa_refresh_token = "REDACTED"
+
+projects = {
+  sandbox = {
+    name           = "Sandbox"
+    description    = "General experimentation"
+    administrators = ["platformadmin@company.com"]
+  }
+
+  payments = {
+    name        = "Payments"
+    description = "Payments platform"
+    administrators = [
+      "payments-lead@company.com",
+      "payments-eng@company.com"
+    ]
+  }
+}
+vsphere_accounts = {
+  vcf-lab-wld02 = {
+    name                = "vcf-lab-wld02"
+    hostname            = "vcf-lab-vcenter-wld02.company.com"
+    description         = "vcf-lab-wld02-DC"
+    enabled_datacenters = ["vcf-lab-wld02-dc01", "vcf-lab-wld02-dc02"]
+    nsx_manager         = "vcf-lab-nsxmgr-wld02"
+    capability_tags = [
+      {
+        key   = "cloud",
+        value = "vsphere"
+      },
+      {
+        key   = "availabilityZone",
+        value = "az1"
+      }
+    ]
+    image_mappings = [
+      {
+        image_name    = "ubuntu22",
+        template_name = "vcf-lab-wld02 / ubuntu22", //when referencing a content library you must preceed the template name with it
+        cloud_config  = ""
+      },
+      {
+        image_name    = "ubuntu24",
+        template_name = "vcf-lab-wld02 / ubuntu24", //when referencing a content library you must preceed the template name with it
+        cloud_config  = ""
+      }
+    ]
+  }
+}
+
+```
+
+---
+
+## Step 2 — Run Terraform
+
+```bash
+terraform init -backend-config="key=vcf/control-plane.tfstate"
+terraform plan  -var-file="envs/lab.tfvars"
+terraform apply -var-file="envs/lab.tfvars"
+```
+
+This will:
+
+✔ Create VCFA Projects  
+✔ Create GitHub repos per project  
+✔ Push secrets + variables to those repos  
+✔ Apply naming conventions + governance  
+
+---
+
+## Step 3 — App Teams Take Over
+
+Each project repo includes:
+
+- IaC folder
+- CI/CD pipeline
+- Decommission workflow
+- Backend definition
+
+App teams deploy VMs or blueprints using:
+
+```bash
+terraform apply -var-file="envs/app.tfvars"
+```
+
+---
+
+# 🔐 GitHub Actions Workflows
+
+### `configure-private-cloud.yml`
+Used by this repo to apply platform changes:
+
+- Validates all project definitions  
+- Applies changes to VCFA Projects  
+- Creates updates/deletions in GitHub  
+
+### `decommission.yml` (in generated repos)
+Ensures infrastructure is torn down **before** project deletion.
+
+### `validate.yml` (Future)
+Governance checks such as:
+
+- Correct repo structure  
+- Required secrets  
+- Branch protections  
+- Policy compliance  
+- Required labels/tags in VCFA  
+
+---
+
+# 🛡 Safety Model
+
+This repo follows a **two-phase lifecycle deletion**:
+
+| Phase | Action | Required? |
+|------|--------|-----------|
+| 1 | App repo runs `decommission.yml` | ✅ Prevents orphaned workloads |
+| 2 | Platform repo removes project + repo | ✅ Final removal |
+
+This prevents:
+
+- Bricked VCFA project deletions  
+- Lost Terraform state  
+- GitHub repo deletion with active workloads  
+
+---
+
+# 🌐 Vision: VCF-as-a-Service
+
+This repository forms the backbone of a GitOps-driven VCF platform:
+
+- App teams get cloud-like tenancy  
+- Platform team enforces guardrails + governance  
+- Infrastructure becomes fully declarative  
+- Operations scale with automation  
+
+A parallel repo will extend this to **All‑Apps** tenants for full platform coverage.
+
+---
+
+## Questions?
+
+Feel free to reach out to me at [scott.bowe@broadcom.com](mailto:scott.bowe@broadcom.com) or [scottb@sentania.net](scottb@sentania.net).  Alternatively, feel free to open an issue.
+
+---
+
+# 📄 License
+
+MIT License
