@@ -5,8 +5,8 @@ locals {
 }
 
 module "projects" {
-  source  = "sentania-labs/project/vra"
-  version = "0.6.0"
+  source     = "sentania-labs/project/vra"
+  version    = "0.6.0"
   depends_on = [time_sleep.wait_cloud_account_creation]
   for_each   = var.projects
 
