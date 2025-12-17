@@ -144,38 +144,6 @@ variable "vsphere_accounts" {
   }))
 }
 
-
-########################################
-# Project Definitions
-########################################
-
-/**
- * projects
- *
- * A map of project configurations.
- *
- * Structure:
- *   projects = {
- *     key = {
- *       name           = string
- *       description    = string
- *       basename       = string
- *       administrators = list(string)
- *       infra_tag      = string
- *     }
- *   }
- */
-variable "projects" {
-  description = "Map of project definitions."
-  type = map(object({
-    name           = string
-    description    = string
-    basename       = string
-    administrators = list(string)
-    infra_tag      = string
-  }))
-}
-
 variable "projects" {
   description = "Map of vRA project definitions."
   type = map(object({
