@@ -86,7 +86,7 @@ projects = {
 
   }
 
-  hr_project = {
+  grand_rounds = {
     project_name     = "vcf-lab-grand-rounds"
     description      = "This is a project created with TF - Do Not Edit"
     basename         = "vra-hr-$${####}"
