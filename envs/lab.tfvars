@@ -12,7 +12,6 @@ nsx_accounts = {
     ]
   }
 }
-
 vsphere_accounts = {
   vcf-lab-wld02 = {
     name                = "vcf-lab-wld02"
