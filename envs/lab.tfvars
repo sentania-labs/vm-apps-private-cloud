@@ -44,7 +44,6 @@ vsphere_accounts = {
     ]
   }
 }
-
 projects = {
   sandbox_project = {
     project_name     = "vcf-lab-sandbox"
