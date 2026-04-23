@@ -2,7 +2,9 @@
 # vm-apps-private-cloud
 
 ---
-![VCF Control Plane Flow](./images/flow.png)
+![VCF Automation Control Plane Topology](./docs/diagrams/topology.png)
+
+*Source: [`docs/diagrams/topology.excalidraw`](./docs/diagrams/topology.excalidraw)*
 
 ---
 
