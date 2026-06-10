@@ -1,6 +1,8 @@
 # Local .terraform directories
 **/.terraform/*
 **/testing/
+# Provider lock file — kept untracked by team preference
+.terraform.lock.hcl
 # .tfstate files
 *.tfstate
 *.tfstate.*

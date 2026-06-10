@@ -176,12 +176,12 @@ projects = {
   }
 }
 vsphere_accounts = {
-  vcf-lab-wld02 = {
-    name                = "vcf-lab-wld02"
-    hostname            = "vcf-lab-vcenter-wld02.company.com"
-    description         = "vcf-lab-wld02-DC"
-    enabled_datacenters = ["vcf-lab-wld02-dc01", "vcf-lab-wld02-dc02"]
-    nsx_manager         = "vcf-lab-nsxmgr-wld02"
+  vcf-lab-wld01 = {
+    name                = "vcf-lab-wld01"
+    hostname            = "vcf-lab-vcenter-wld01.company.com"
+    description         = "vcf-lab-wld01-DC"
+    enabled_datacenters = ["vcf-lab-wld01-dc01", "vcf-lab-wld01-dc02"]
+    nsx_manager         = "vcf-lab-nsxmgr-wld01"
     capability_tags = [
       {
         key   = "cloud",
@@ -195,12 +195,12 @@ vsphere_accounts = {
     image_mappings = [
       {
         image_name    = "ubuntu22",
-        template_name = "vcf-lab-wld02 / ubuntu22", //when referencing a content library you must preceed the template name with it
+        template_name = "vcf-lab-wld01 / ubuntu22", //when referencing a content library you must preceed the template name with it
         cloud_config  = ""
       },
       {
         image_name    = "ubuntu24",
-        template_name = "vcf-lab-wld02 / ubuntu24", //when referencing a content library you must preceed the template name with it
+        template_name = "vcf-lab-wld01 / ubuntu24", //when referencing a content library you must preceed the template name with it
         cloud_config  = ""
       }
     ]

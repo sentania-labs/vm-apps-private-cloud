@@ -1,6 +1,6 @@
 module "cloud_zones" {
   source     = "sentania-labs/cloudzone/vra"
-  version    = "0.3.0"
+  version    = "0.8.0"
   depends_on = [module.cloud_accounts_vsphere]
   for_each   = data.vra_region.all
 
