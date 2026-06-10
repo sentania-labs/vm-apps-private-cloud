@@ -1,9 +1,9 @@
 vcfa_url          = "https://vcf-lab-automation.int.sentania.net"
 vcfa_organization = "vcf-lab-vm-apps"
 nsx_accounts = {
-  nsx-wld02 = {
-    name     = "vcf-lab-nsxmgr-wld02"
-    hostname = "vcf-lab-nsxmgr-wld02.int.sentania.net"
+  nsx-wld01 = {
+    name     = "vcf-lab-nsxmgr-wld01"
+    hostname = "vcf-lab-nsxmgr-wld01.int.sentania.net"
     capability_tags = [
       {
         key   = "cloud",
@@ -13,12 +13,12 @@ nsx_accounts = {
   }
 }
 vsphere_accounts = {
-  vcf-lab-wld02 = {
-    name                = "vcf-lab-wld02"
-    hostname            = "vcf-lab-vcenter-wld02.int.sentania.net"
-    description         = "vcf-lab-wld02-DC"
-    enabled_datacenters = ["vcf-lab-wld02-dc01"]
-    nsx_manager         = "vcf-lab-nsxmgr-wld02"
+  vcf-lab-wld01 = {
+    name                = "vcf-lab-wld01"
+    hostname            = "vcf-lab-vcenter-wld01.int.sentania.net"
+    description         = "vcf-lab-wld01-DC"
+    enabled_datacenters = ["vcf-lab-wld01-dc01"]
+    nsx_manager         = "vcf-lab-nsxmgr-wld01"
     capability_tags = [
       {
         key   = "cloud",
@@ -32,12 +32,12 @@ vsphere_accounts = {
     image_mappings = [
       {
         image_name    = "ubuntu22",
-        template_name = "vcf-lab-wld02 / ubuntu22", //when referencing a content library you must preceed the template name with it
+        template_name = "vcf-lab-wld01-contentlibrary / ubuntu22", //when referencing a content library you must preceed the template name with it
         cloud_config  = ""
       },
       {
         image_name    = "ubuntu24",
-        template_name = "vcf-lab-wld02 / ubuntu24", //when referencing a content library you must preceed the template name with it
+        template_name = "vcf-lab-wld01-contentlibrary / ubuntu24", //when referencing a content library you must preceed the template name with it
         cloud_config  = ""
       }
     ]
