@@ -37,3 +37,6 @@ get_token.ps1
 
 # Local PKA comm zone (not shared)
 .pka/
+
+docs/diagrams/.venv/
+docs/diagrams/__pycache__/
