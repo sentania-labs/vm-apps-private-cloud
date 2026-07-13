@@ -2,9 +2,9 @@
 # vm-apps-private-cloud
 
 ---
-![VCF Automation Control Plane Topology](./docs/diagrams/topology.png)
+![VM Apps Private Cloud - Cloud-Style Consumption](./docs/diagrams/topology.png)
 
-*Source: [`docs/diagrams/topology.excalidraw`](./docs/diagrams/topology.excalidraw)*
+*VCF Automation is the API for the vSphere layer; the Terraform consumption pipeline is the cloud. Source: [`docs/diagrams/topology.excalidraw`](./docs/diagrams/topology.excalidraw)*
 
 ---
 
