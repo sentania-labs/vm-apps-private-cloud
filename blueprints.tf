@@ -1,5 +1,5 @@
 locals {
-  # create_repo doubles as the project-type discriminator:
+  # iac_project is the project-type discriminator:
   # true  -> IaC project: pipeline repo + Simple IAC Blueprint (tier baked in via infra_tag)
   # false -> self-service project: no repo; Simple Self Service Blueprint with
   #          runtime serviceLevel selection
@@ -8,14 +8,14 @@ locals {
     k => {
       project_id = module.projects[k].project.id
       infra_tag  = v.infra_tag
-    } if v.create_repo
+    } if v.iac_project
   }
 
   selfservice_projects = {
     for k, v in var.projects :
     k => {
       project_id = module.projects[k].project.id
-    } if !v.create_repo
+    } if !v.iac_project
   }
 }
 
