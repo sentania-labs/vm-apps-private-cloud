@@ -1,0 +1,90 @@
+formatVersion: 1
+inputs:
+  operatingSystem:
+    type: string
+    default: ubuntu24
+    enum:
+      - ubuntu22
+      - ubuntu24
+  serviceLevel:
+    type: string
+    title: Service Level
+    default: development
+    enum:
+      - development
+      - test
+      - production
+  disks:
+    type: array
+    minItems: 0
+    maxItems: 4
+    items:
+      type: object
+      properties:
+        size:
+          type: integer
+          title: Size (GB)
+          minSize: 1
+          maxSize: 2048
+        DiskOrder:
+          type: integer
+          title: Disk Order
+          maximum: 4
+          minimum: 1
+          default: 3
+    default:
+      - size: 10
+        DiskOrder: 1
+      - size: 15
+        DiskOrder: 2
+  VMCount:
+    type: integer
+    default: 1
+resources:
+  Cloud_Machine_1:
+    type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 1
+        - 1
+    allocatePerInstance: true
+    properties:
+      image: $${input.operatingSystem}
+      flavor: medium
+      count: $${input.VMCount}
+      storage:
+        constraints:
+          - tag: storageTier:iscsi
+      networks:
+        - network: $${resource.Cloud_NSX_Network_1.id}
+          assignment: static
+      constraints:
+        - tag: "!vcfaCapablity:closed:hard"
+        - tag: $${"serviceLevel:" + input.serviceLevel}
+      attachedDisks: $${map_to_object(slice(resource.Cloud_vSphere_Disk_1[*].id, (length(input.disks))*count.index, (length(input.disks))*(count.index + 1)), "source")}
+  Cloud_vSphere_Disk_1:
+    type: Cloud.vSphere.Disk
+    metadata:
+      layoutPosition:
+        - 0
+        - 0
+    allocatePerInstance: true
+    properties:
+      capacityGb: $${input.disks[count.index%(length(input.disks))].size}
+      provisioningType: thin
+      storagePolicy: Datastore Default
+      myProp.diskSize: $${input.disks[count.index%(length(input.disks))].size}
+      myProp.UnitNum: $${input.disks[count.index%(length(input.disks))].DiskOrder}
+      SCSIController: SCSI_Controller_1
+      unitNumber: $${input.disks[count.index%(length(input.disks))].DiskOrder}
+      count: $${(length(input.disks))*(input.VMCount)}
+  Cloud_NSX_Network_1:
+    type: Cloud.NSX.Network
+    metadata:
+      layoutPosition:
+        - 2
+        - 0
+    properties:
+      networkType: existing
+      constraints:
+        - tag: $${"serviceLevel:" + input.serviceLevel}
