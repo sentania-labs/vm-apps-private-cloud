@@ -2,7 +2,7 @@ module "repository" {
   source  = "mineiros-io/repository/github"
   version = "0.18.0"
 
-  for_each = module.projects
+  for_each = { for k, m in module.projects : k => m if var.projects[k].create_repo }
 
   name       = each.value.project.name
   visibility = "public"

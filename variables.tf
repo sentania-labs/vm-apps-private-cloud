@@ -154,6 +154,11 @@ variable "projects" {
     # Used by blueprint modules for variable substitution
     infra_tag = string
 
+    # Whether to instantiate a GitHub pipeline repo for this project.
+    # Absent -> true (repo created); explicit false -> classical
+    # API/catalog-consumed project with no repo.
+    create_repo = optional(bool, true)
+
     placement_policy = optional(string, "DEFAULT")
 
     roles = object({
