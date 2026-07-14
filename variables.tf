@@ -159,8 +159,15 @@ variable "projects" {
     # Project type. true (default) -> IaC project: GitHub pipeline
     # repo + Simple IAC Blueprint (tier baked in via infra_tag).
     # false -> self-service project: no repo; Simple Self Service
-    # Blueprint with runtime serviceLevel selection.
+    # Blueprint with runtime serviceLevel selection, plus a catalog
+    # source + project-scoped sharing policy so project users can
+    # publish released blueprints without admin-level access.
     iac_project = optional(bool, true)
+
+    # Self-service projects only: additionally share this project's
+    # catalog source org-wide (all users, all projects). Used by the
+    # central content-development project for standard offerings.
+    global_catalog = optional(bool, false)
 
     placement_policy = optional(string, "DEFAULT")
 
