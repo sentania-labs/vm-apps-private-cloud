@@ -116,6 +116,16 @@ projects = {
         {
           email = "labAdmins@int.sentania.net"
           type  = "GROUP"
+        },
+        {
+          email = "self-service-admin@int.sentania.net"
+          type  = "USER"
+        }
+      ]
+      members = [
+        {
+          email = "self-service-user@int.sentania.net"
+          type  = "USER"
         }
       ]
     }
