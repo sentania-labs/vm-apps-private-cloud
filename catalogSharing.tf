@@ -15,8 +15,13 @@ module "selfservice_catalog" {
   project_id          = each.value.project_id
   catalog_source_name = "${var.projects[each.key].project_name} Catalog"
 
+  # VCFA accepts only ONE role per role-based sharing policy, so emit a
+  # policy per role instead of the module default (both roles in one).
   sharing_policies = merge(
-    { project = {} },
+    {
+      members        = { roles = ["member"] }
+      administrators = { roles = ["administrator"] }
+    },
     var.projects[each.key].global_catalog ? {
       organization = {
         scope               = "organization"
