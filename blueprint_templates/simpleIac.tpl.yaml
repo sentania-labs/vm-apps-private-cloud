@@ -34,7 +34,7 @@ resources:
     properties:
       constraints:
         - tag: "!vcfaCapablity:closed:hard"
-        - tag: "application:${infra_tag}"
+        - tag: "serviceLevel:${infra_tag}"
       image: $${input.image}
       flavor: $${input.flavorSize}
       attachedDisks: $${map_to_object(resource["ubuntuVM-disk"][*].id, "source")}
@@ -48,4 +48,4 @@ resources:
     properties:
       networkType: existing
       constraints:
-        - tag: "application:${infra_tag}"
+        - tag: "serviceLevel:${infra_tag}"
