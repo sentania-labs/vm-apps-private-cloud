@@ -24,6 +24,8 @@ jobs:
       # vSphere / vRA / VCF environment-specific credentials
       TF_VAR_serviceAccountUserName: ${{ secrets.VCF_SERVICE_USER }}
       TF_VAR_serviceAccountPassword: ${{ secrets.VCF_SERVICE_PASSWORD }}
+      TF_VAR_nsxServiceAccountUserName: ${{ secrets.WLD02_NSX_USER }}
+      TF_VAR_nsxServiceAccountPassword: ${{ secrets.WLD02_NSX_PASS }}
       TF_VAR_vcfa_refresh_token: ${{ secrets.VCFA_API_TOKEN}}
       TF_VAR_github_access_token: ${{ secrets.REPO_ACCESS_TOKEN }}
 

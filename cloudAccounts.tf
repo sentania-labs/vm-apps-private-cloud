@@ -28,8 +28,8 @@ module "cloud_accounts_nsxt" {
 
   name            = each.value.name
   hostname        = each.value.hostname
-  password        = var.serviceAccountPassword
-  username        = var.serviceAccountUserName
+  password        = var.nsxServiceAccountPassword
+  username        = var.nsxServiceAccountUserName
   capability_tags = each.value.capability_tags
 }
 ##END NSX Manager

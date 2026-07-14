@@ -198,3 +198,19 @@ variable "projects" {
     custom_properties = optional(map(string), {})
   }))
 }
+
+/**
+ * nsxServiceAccountUserName / nsxServiceAccountPassword
+ * Dedicated NSX local user for the NSX cloud accounts. VCF SSO
+ * (vIDB-federated) users cannot password-authenticate to the NSX API
+ * in VCF 9.1, so the NSX manager endpoints use a local service
+ * account instead of the vSphere/AD service account.
+ */
+variable "nsxServiceAccountUserName" {
+  type = string
+}
+
+variable "nsxServiceAccountPassword" {
+  type      = string
+  sensitive = true
+}
