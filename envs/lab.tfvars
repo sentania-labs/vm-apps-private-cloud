@@ -101,4 +101,23 @@ projects = {
       ]
     }
   }
+  selfservice_project = {
+    project_name     = "vcf-lab-self-service"
+    description      = "This is a project created with TF - Do Not Edit"
+    basename         = "vra-ss-$${####}"
+    create_repo      = false
+    placement_policy = "SPREAD"
+    roles = {
+      administrators = [
+        {
+          email = "vcf@int.sentania.net"
+          type  = "USER"
+        },
+        {
+          email = "labAdmins@int.sentania.net"
+          type  = "GROUP"
+        }
+      ]
+    }
+  }
 }

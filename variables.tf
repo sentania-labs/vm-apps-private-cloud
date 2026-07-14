@@ -151,8 +151,10 @@ variable "projects" {
     description  = string
     basename     = string
 
-    # Used by blueprint modules for variable substitution
-    infra_tag = string
+    # Used by the IaC blueprint for tag substitution. Only meaningful
+    # when create_repo = true; self-service projects select their
+    # serviceLevel at request time and may omit this.
+    infra_tag = optional(string, "")
 
     # Whether to instantiate a GitHub pipeline repo for this project.
     # Absent -> true (repo created); explicit false -> classical
