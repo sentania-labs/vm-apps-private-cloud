@@ -151,8 +151,16 @@ variable "projects" {
     description  = string
     basename     = string
 
-    # Used by blueprint modules for variable substitution
-    infra_tag = string
+    # Used by the IaC blueprint for tag substitution. Only meaningful
+    # when iac_project = true; self-service projects select their
+    # serviceLevel at request time and may omit this.
+    infra_tag = optional(string, "")
+
+    # Project type. true (default) -> IaC project: GitHub pipeline
+    # repo + Simple IAC Blueprint (tier baked in via infra_tag).
+    # false -> self-service project: no repo; Simple Self Service
+    # Blueprint with runtime serviceLevel selection.
+    iac_project = optional(bool, true)
 
     placement_policy = optional(string, "DEFAULT")
 
