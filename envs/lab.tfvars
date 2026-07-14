@@ -130,4 +130,20 @@ projects = {
       ]
     }
   }
+  content_development_project = {
+    project_name     = "vcf-lab-content-development"
+    description      = "This is a project created with TF - Do Not Edit"
+    basename         = "vra-cd-$${####}"
+    iac_project      = false
+    global_catalog   = true
+    placement_policy = "SPREAD"
+    roles = {
+      administrators = [
+        {
+          email = "labAdmins@int.sentania.net"
+          type  = "GROUP"
+        }
+      ]
+    }
+  }
 }

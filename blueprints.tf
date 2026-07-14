@@ -44,3 +44,21 @@ module "selfServiceBlueprint" {
 
   content = templatefile("${path.module}/blueprint_templates/simpleSelfService.tpl.yaml", {})
 }
+
+# Content projects (global_catalog) get a richer example library for
+# blueprint authors — seeded as drafts, intentionally never released
+# by Terraform.
+module "multiDiskBlueprint" {
+  source  = "sentania-labs/blueprint/vra"
+  version = "0.9.0"
+
+  for_each = {
+    for k, v in local.selfservice_projects :
+    k => v if var.projects[k].global_catalog
+  }
+
+  projectid      = each.value.project_id
+  blueprint_name = "Multi-Disk Template"
+
+  content = templatefile("${path.module}/blueprint_templates/multiDisk.tpl.yaml", {})
+}
