@@ -11,7 +11,7 @@ on:
 jobs:
   terraform:
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.owner.login == 'sentania-labs'
-    runs-on: [self-hosted, terraform]
+    runs-on: lab
 
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
