@@ -11,7 +11,14 @@ on:
 jobs:
   terraform:
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.owner.login == 'sentania-labs'
-    runs-on: [self-hosted, terraform]
+    # Exact string, not an array. ARC scale sets match by NAME, so
+    # [self-hosted, terraform] matches nothing in this org's pool: the job
+    # would not fail, it would queue silently until GitHub timed it out
+    # around 24h. This job needs the lab anyway (VCFA at
+    # vcf-lab-automation.int.sentania.net, NSX and vCenter on wld02), and
+    # the runner image bakes in terraform plus the lab root CA.
+    # Contract: sentania-labs/homelab-runner/docs/ci-consumer-contract.md
+    runs-on: lab
 
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -59,5 +66,11 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: terraform apply -input=false -auto-approve tfplan
 
+      # ARC gives one ephemeral pod per job and destroys it afterwards, so
+      # this cleans something about to cease existing. Kept because it is
+      # correct on any runner, but widened and made unconditional: the old
+      # glob was $GITHUB_WORKSPACE/.[!.]* which matches DOTFILES ONLY, so it
+      # never removed tfplan, the one file in the workspace worth removing.
       - name: Clean workspace
-        run: rm -rf $GITHUB_WORKSPACE/.[!.]*
+        if: always()
+        run: find "$GITHUB_WORKSPACE" -mindepth 1 -delete
