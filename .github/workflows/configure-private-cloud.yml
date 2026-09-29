@@ -21,9 +21,10 @@ jobs:
     runs-on: lab
 
     env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
+      # State backend credentials (lab S3). The S3 backend reads the AWS_*
+      # names, so the lab key is passed under them; nothing here talks to AWS.
+      AWS_ACCESS_KEY_ID: ${{ secrets.TF_STATE_S3_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_STATE_S3_SECRET_ACCESS_KEY }}
       
       TF_IN_AUTOMATION: "true"
       TF_INPUT: "false"

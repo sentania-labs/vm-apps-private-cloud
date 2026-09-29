@@ -91,7 +91,7 @@ If you add a resource that needs cloud accounts or regions to exist, hang it off
 
 ## State & CI
 
-- **Backend:** S3 bucket `sentania-labs-terraform-state`, key
+- **Backend:** lab S3 (`https://s3.int.sentania.net:9443`, bucket `tfstate`; moved from AWS 2026-09-28), key
   `vra/vm-apps-private-cloud/lab/terraform.tfstate`, `use_lockfile = true` (S3-native locking, no DynamoDB).
 - **CI:** `.github/workflows/configure-private-cloud.yml` runs on a `[self-hosted, terraform]` runner.
   All `pull_request` jobs are **fork-gated** (`github.event.pull_request.head.repo.owner.login == 'sentania-labs'`)
